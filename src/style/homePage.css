@@ -1,0 +1,74 @@
+@media only screen and (min-width: 500px) {
+  .container {
+    display: flex;
+    background: #fafafa;
+  }
+
+  .tabs {
+    display: block !important;
+    width: 40%;
+    height: 100vh;
+    overflow: auto;
+    gap: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 5px #d7d7d7;
+    z-index: 3;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .map {
+    width: 100%;
+    height: calc(100vh - 1px);
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .tabs {
+    position: absolute;
+    width: 70%;
+    height: 100vh;
+    overflow: auto;
+    gap: 20px;
+    background-color: #fff;
+    box-shadow: 0px 0px 5px #d7d7d7;
+    z-index: 1;
+    animation: anim 0.5s ease;
+  }
+
+  @keyframes anim {
+    0% {
+      width: 0%;
+    }
+
+    100% {
+      width: 70%;
+    }
+  }
+
+  .map {
+    width: 100%;
+    height: calc(100vh - 1px);
+  }
+
+  .nav-toggle {
+    position: absolute;
+    padding: 10px;
+    background: transparent;
+    border: 1px solid transparent;
+    margin: 7px 0;
+    z-index: 1;
+  }
+
+  .nav-toggle [class*='bar-'] {
+    background: rgb(255, 158, 0);
+    display: block;
+
+    border-radius: 4px;
+    height: 4px;
+    width: 30px;
+    margin-bottom: 4px;
+  }
+}

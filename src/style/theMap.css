@@ -1,0 +1,117 @@
+[class*='map-copyrights-promo'] {
+  display: none;
+}
+
+[class*='balloon__layout'] {
+  padding: 10px;
+  background: #1e355d !important;
+}
+
+[class*='ground-pane'] {
+  filter: grayscale(100%);
+}
+
+[class*='balloon__tail']::after {
+  background: #1e355d !important;
+}
+
+.shadow {
+  [class*='image'] {
+    border: solid 1px #fff;
+    box-shadow: 0px 0px 10px #1e355d;
+    border-radius: 20px;
+  }
+}
+
+[class*='balloon__close-button'] {
+  margin: 10px;
+  width: 10px !important;
+  height: 10px !important;
+  background-image: url('../../assets/icons/icons-close.svg') !important;
+  opacity: 0.8;
+}
+
+@media only screen and (min-width: 500px) {
+  /*возможно удалить left: -10px; top: -40px; */
+  [class*='image-with-content'] {
+    color: #fff;
+    font-family: 'Open Sans', sans-serif;
+    width: 40px;
+  }
+
+  [class*='balloon__content'] {
+    padding: 0px !important;
+    margin: 0px !important;
+    width: 450px !important;
+    height: 170px !important;
+    background: #1e355d !important;
+  }
+
+  [class*='balloon_to_top'] {
+    position: absolute !important;
+    top: -202px !important;
+  }
+
+  .yandex-balloon {
+    padding-top: 20px;
+    color: #000;
+    width: 400px;
+    height: 170px !important;
+    background: #1e355d;
+  }
+
+  .cluster-icon {
+    background-color: #ff5722;
+    color: #ffffff;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .balloon {
+    color: #fff;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .details {
+    gap: 10px;
+    font-size: 13px;
+  }
+
+  .details-title {
+    font-size: 16px;
+  }
+
+  [class*='balloon__close-button'] {
+    margin: 4px;
+    width: 9px !important;
+    height: 9px !important;
+  }
+  [class*='balloon_to_top'] {
+    position: absolute !important;
+    top: -162px !important;
+  }
+
+  [class*='balloon__content'] {
+    padding: 0px !important;
+    margin: 0px !important;
+    height: 130px !important;
+    width: 310px !important;
+    background: #1e355d !important;
+  }
+
+  .yandex-balloon {
+    padding: 15px 0;
+    width: 310px;
+    height: 130px;
+    background: #1e355d;
+  }
+
+  .balloon {
+    color: #fff;
+  }
+}
