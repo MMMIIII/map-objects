@@ -1,10 +1,15 @@
 <script lang="ts">
-  import { ref, watch } from 'vue';
+  import { Ref, ref } from 'vue';
+  import { useConfigMap } from '@/composables/useConfigMap';
+  import { getBoundByCordinates } from '@/utils/bounds';
+  import { YandexMap, YandexMarker, YandexClusterer } from 'vue-yandex-maps';
   //@ts-ignore
   import citiesDto from '@/mock/citiesDto.json';
-  import { YandexMap, YandexMarker, YandexClusterer } from 'vue-yandex-maps';
+  //@ts-ignore
+  import countriesDto from '@/mock/countriesDto.json';
   import CityDetails from '@/components/sidebar/CityDetails.vue';
 
+  import { CountryJson, PointsJson } from '@/types/countriesDto';
   export default {
     components: {
       YandexMap,
@@ -17,84 +22,46 @@
         type: Object,
         default: null,
       },
-      countryCoordinates: {
-        type: Array,
-        default: () => [],
-      },
     },
     emits: ['open-expansion'],
     setup(props, { emit }) {
+      const { settingsMap, markerOptions, clustererOptions } = useConfigMap();
       const refYandexMarker = ref(null);
 
       const targetMarket = ref(null);
       const oldTargetMarket = ref(null);
 
-      const settingsMap = ref({
-        apiKey: 'ad50c498-f42c-4513-bf3e-0b698f4c0380',
-        lang: 'ru_RU',
-        coordorder: 'latlong',
-        enterprise: false,
-        version: '2.1',
-      });
+      const currentCountry: Ref<number | null> = ref(null);
+
+      const jsonCountriesDto: CountryJson[] = countriesDto;
 
       let ymaps = null;
 
-      const markerOptions = ref({
-        iconLayout: 'default#image',
-        iconImageHref: '../../assets/icons/ellipse.svg',
-        iconImageSize: [40, 40],
-        hideIconOnBalloonOpen: false,
-        balloonOffset: [8, -26],
-      });
+      async function setCenter() {
+        let filtredCoordinates: number[][] = jsonCountriesDto
+          .filter(county => county.id === currentCountry.value)
+          .map(county => county.cities)[0]
+          .map(city => {
+            return city.points.map(point => point.coordinates)[0];
+          });
+        let bounds = getBoundByCordinates(filtredCoordinates);
 
-      const customClusterStyle = {
-        clusterIconLayout: 'default#imageWithContent',
-        clusterIconImageHref: '../../assets/icons/clusterer.svg',
-        clusterIconImageSize: [40, 40],
-        clusterIconContentSize: [40, 40],
-        clusterIconContentOffset: [0, 11],
-      };
+        await ymaps.setBounds(bounds);
+      }
 
-      const clustererOptions = {
-        preset: customClusterStyle,
-        groupByCoordinates: false,
-        clusterDisableClickZoom: true,
-        clusterOpenBalloonOnClick: false,
-      };
+      function changeCountry(countryCoordinates) {
+        currentCountry.value = countryCoordinates.id;
+        setCenter();
 
-      const clickZoom = (coordinates: number[]) =>
-        ymaps.setCenter(coordinates, 10);
+        if (!oldTargetMarket.value) return;
+        oldTargetMarket.value.balloon.close();
+      }
 
-      watch(
-        () => props.point,
-        async newCoordinates => {
-          ymaps.setCenter(newCoordinates.coordinates, 20);
-
-          getTargetMarker(newCoordinates.id);
-
-          await targetMarket.value.balloon.close();
-          await targetMarket.value.balloon.open();
-        },
-        {
-          deep: true,
-        }
-      );
-
-      watch(
-        () => props.countryCoordinates,
-        newCountryCoordinates => {
-          ymaps.setCenter(newCountryCoordinates, 4);
-
-          if (!oldTargetMarket.value) return;
-          oldTargetMarket.value.balloon.close();
-        }
-      );
-
-      const getTargetMarker = (markerId: number) => {
+      function getTargetMarker(markerId: number) {
         targetMarket.value = refYandexMarker.value.find(
           marker => marker.properties._data.markerId === markerId
         );
-      };
+      }
 
       async function onMarkerAddShadow() {
         if (!targetMarket.value) return;
@@ -118,7 +85,20 @@
         });
       }
 
-      const onMapCreated = value => (ymaps = value);
+      async function openBalloon(newCoordinates: PointsJson) {
+        {
+          ymaps.setCenter(newCoordinates.coordinates, 20);
+
+          getTargetMarker(newCoordinates.id);
+
+          await targetMarket.value.balloon.close();
+          await targetMarket.value.balloon.open();
+        }
+      }
+
+      function onMapCreated(value) {
+        ymaps = value;
+      }
 
       return {
         settingsMap,
@@ -126,22 +106,23 @@
         citiesDto,
         clustererOptions,
         refYandexMarker,
-        onMapCreated,
+        getTargetMarker,
+        openBalloon,
+        changeCountry,
         onMarkerAddShadow,
         onMarkerDeleteShadow,
-        clickZoom,
-        getTargetMarker,
+        onMapCreated,
       };
     },
   };
 </script>
 
 <template>
-  <div>
+  <main>
     <yandex-map
       :settings="settingsMap"
       :coordinates="[55.755864, 37.617698]"
-      :zoom="10"
+      :zoom="4"
       class="map"
       :controls="[]"
       @created="onMapCreated"
@@ -169,7 +150,7 @@
         </yandex-marker>
       </yandex-clusterer>
     </yandex-map>
-  </div>
+  </main>
 </template>
 
 <style>

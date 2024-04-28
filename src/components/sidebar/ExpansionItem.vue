@@ -1,7 +1,8 @@
 <script lang="ts">
   import { PropType, ref, computed, watch } from 'vue';
   import { CitiesJson } from '@/types/countriesDto';
-
+  import downArrow from '../../../assets/icons/down-arrow.vue';
+  import upArrow from '../../../assets/icons/up-arrow.vue';
   export default {
     props: {
       city: {
@@ -14,14 +15,12 @@
       },
     },
     emits: ['click-zoom'],
-    setup(props, { emit }) {
+    setup(props) {
       const expanded = ref(false);
       const activeExpansion = ref(false);
 
       const getSrcArrow = computed(() => {
-        return expanded.value
-          ? '../../assets/icons/up-arrow.svg'
-          : '../../assets/icons/down-arrow.svg';
+        return expanded.value ? upArrow : downArrow;
       });
 
       watch(
@@ -33,18 +32,15 @@
         }
       );
 
-      const onExpandedChange = () => (expanded.value = !expanded.value);
-
-      const onExpansionItemClick = () => {
-        if (expanded.value) emit('click-zoom', props.city.points[0]);
-      };
+      function onExpandedChange() {
+        return (expanded.value = !expanded.value);
+      }
 
       return {
         expanded,
         getSrcArrow,
-        onExpandedChange,
         activeExpansion,
-        onExpansionItemClick,
+        onExpandedChange,
       };
     },
   };
@@ -52,36 +48,39 @@
 
 <template>
   <div class="expansion-item">
-    <h3
+    <button
       class="header"
       :class="{ active: activeExpansion }"
       @click="onExpandedChange"
     >
       <span>{{ city.titleCity }}</span>
 
-      <img class="header-icon" :src="getSrcArrow" alt="icon" />
-    </h3>
+      <component :is="getSrcArrow"></component>
+    </button>
 
-    <div v-if="expanded || activeExpansion" class="content">
+    <button v-if="expanded" class="content">
       <slot></slot>
-    </div>
+    </button>
   </div>
 </template>
 
 <style scoped lang="scss">
   .expansion-item {
-    border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
     font-family: 'Open Sans', sans-serif;
 
     .header {
       display: flex;
       justify-content: space-between;
+      align-items: center;
       padding: 20px 26px;
       cursor: pointer;
       font-size: 17px;
       font-weight: bold;
       color: #537592;
+      background: none;
+      border: none;
+      width: 100%;
 
       &-icon {
         width: 10px;
@@ -94,7 +93,15 @@
     }
 
     .content {
+      background: none;
+      border: none;
       padding: 10px;
     }
+    .content:last-child {
+      padding-bottom: 35px;
+    }
+  }
+  .expansion-item:first-child {
+    border-top: solid 1px #ccc;
   }
 </style>

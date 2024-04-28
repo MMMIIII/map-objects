@@ -1,15 +1,14 @@
-@media only screen and (min-width: 500px) {
+@media only screen and (min-width: 740px) {
   .container {
     display: flex;
     background: #fafafa;
   }
-
-  .tabs {
+  .aside {
     display: block !important;
-    width: 40%;
+    min-width: 300px;
+    width: 35% !important;
     height: 100vh;
     overflow: auto;
-    gap: 20px;
     background-color: #fff;
     box-shadow: 0px 0px 5px #d7d7d7;
     z-index: 3;
@@ -25,27 +24,35 @@
   }
 }
 
-@media only screen and (max-width: 500px) {
-  .tabs {
-    position: absolute;
-    width: 70%;
+@media only screen and (max-width: 740px) {
+  .sidebar {
+    width: 40vw;
+    min-width: 250px;
     height: 100vh;
     overflow: auto;
     gap: 20px;
     background-color: #fff;
     box-shadow: 0px 0px 5px #d7d7d7;
-    z-index: 1;
-    animation: anim 0.5s ease;
+    animation: anim 0.2s ease;
   }
 
   @keyframes anim {
     0% {
-      width: 0%;
+      min-width: 0px;
+      width: 0vw;
     }
 
     100% {
-      width: 70%;
+      width: 40vw;
     }
+  }
+
+  .aside {
+    position: absolute;
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: flex-start;
+    z-index: 1;
   }
 
   .map {
@@ -54,21 +61,51 @@
   }
 
   .nav-toggle {
-    position: absolute;
-    padding: 10px;
+    padding: 15px 0 0 20px;
     background: transparent;
     border: 1px solid transparent;
     margin: 7px 0;
+    height: 2px;
     z-index: 1;
+  }
+
+  .expansion-item .content .details .phone-number {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .nav-toggle.opened [class*='bar-'] {
+    position: absolute;
+    background: rgb(255, 158, 0);
+    height: 1px;
+    width: 27px;
+    margin-bottom: 11px;
+  }
+
+  .nav-toggle.opened {
+    padding: 0 0 0 5px;
+    width: 40px;
+    height: 25px;
+  }
+
+  .nav-toggle.opened .bar-top {
+    transform: rotate(45deg);
+  }
+
+  .nav-toggle.opened .bar-mid {
+    transform: rotate(-45deg);
+  }
+
+  .nav-toggle.opened .bar-bot {
+    display: none;
   }
 
   .nav-toggle [class*='bar-'] {
     background: rgb(255, 158, 0);
     display: block;
-
-    border-radius: 4px;
-    height: 4px;
-    width: 30px;
-    margin-bottom: 4px;
+    height: 2px;
+    width: 24px;
+    margin-bottom: 6px;
   }
 }

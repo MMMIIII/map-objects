@@ -2,6 +2,7 @@ export interface PointsJson {
   id: number;
   title: string;
   fullName: string;
+  coordinates: number[];
   phoneNumber: string[];
   email: string;
 }

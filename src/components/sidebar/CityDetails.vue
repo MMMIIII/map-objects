@@ -15,9 +15,11 @@
     setup(props, { emit }) {
       const city = ref(null);
 
-      const clickZoom = () => emit('click-zoom', props.point);
+      function clickZoom() {
+        emit('click-zoom', props.point);
+      }
 
-      return { clickZoom, city };
+      return { city, clickZoom };
     },
   };
 </script>
@@ -40,16 +42,18 @@
       </span>
     </div>
 
-    <span class="details-email">{{ point.email }}</span>
+    <a href="#" target="_blank" class="details-email">{{ point.email }}</a>
   </div>
 </template>
 
 <style lang="scss">
   .details {
+    width: fit-content;
     display: flex;
     flex-direction: column;
-    gap: 20px;
-    padding: 0 26px 0;
+    align-items: flex-start;
+    gap: 18px;
+    padding: 0 0 0 20px;
     font-size: 16px;
     font-family: 'Open Sans', sans-serif;
 
@@ -60,6 +64,9 @@
     }
 
     .phone-number {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
       &-title {
         padding-right: 10px;
       }
@@ -67,6 +74,7 @@
 
     &-email {
       color: #80cff0;
+      text-decoration: none;
     }
   }
 </style>

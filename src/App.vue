@@ -9,9 +9,7 @@
 </script>
 
 <template>
-  <div>
-    <home-page />
-  </div>
+  <home-page />
 </template>
 
 <style>

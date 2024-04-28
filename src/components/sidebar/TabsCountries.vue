@@ -25,7 +25,7 @@
       const onCountryChange = (country: CountryJson) => {
         activeTab.value = country.id;
 
-        emit('change-country', country.coordinates);
+        emit('change-country', country);
       };
 
       return {
@@ -38,12 +38,12 @@
 </script>
 
 <template>
-  <div class="tabs">
+  <div class="sidebar">
     <div>
       <button
         v-for="country in countriesJson"
         :key="country.id"
-        :class="{ active: activeTab === country.id }"
+        :class="{ active: activeTab === country.id, tabs: true }"
         @click="onCountryChange(country)"
       >
         {{ country.country }}
@@ -61,7 +61,6 @@
         :key="index"
         :city="city"
         :marker-id="markerId"
-        @click-zoom="$emit('click-zoom', $event)"
       >
         <city-details
           v-for="point in city.points"
@@ -75,15 +74,16 @@
 </template>
 
 <style scoped lang="scss">
-  .tabs {
+  .sidebar {
     & button {
       cursor: pointer;
       border: none;
       background: none;
       padding: 8px 16px;
       transition: background-color 0.3s;
-      border: solid #d7d7d7 1px;
-      color: #666666;
+      border: solid #a7a7a7 1px;
+      color: #d7d7d7;
+      color: #a7a7a7;
       width: 50%;
       height: 38px;
     }
@@ -91,7 +91,11 @@
     .tab {
       display: flex;
       flex-direction: column;
-      gap: 20px;
+      gap: 0;
+    }
+
+    .tabs {
+      margin-bottom: 15px;
     }
 
     & button.active {
